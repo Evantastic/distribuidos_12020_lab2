@@ -1,0 +1,1 @@
+SELECT info FROM pipeline.deteccion WHERE objectid=148618231249;
