@@ -23,3 +23,15 @@ docker run -it --rm --network testing \
     -e KAFKA_CFG_ZOOKEEPER_CONNECT=kafka-zookeeper-testing:2181 \
     bitnami/kafka:latest kafka-topics.sh --list --zookeeper \
     kafka-zookeeper-testing:2181
+# To produce messages
+docker run -it --rm --network testing \
+  -e "KAFKA_CFG_ZOOKEEPER_CONNECT=kafka-zookeeper-testing:2181" \
+  -e "ALLOW_PLAINTEXT_LISTENER=yes" bitnami/kafka \
+  kafka-console-producer.sh --broker-list kafka-broker-testing:9092 \
+  --topic Calculo
+# To consume messages
+docker run -it --rm --network testing \
+  -e "KAFKA_CFG_ZOOKEEPER_CONNECT=kafka-zookeeper-testing:2181" \
+  -e "ALLOW_PLAINTEXT_LISTENER=yes" bitnami/kafka \
+  kafka-console-consumer.sh --bootstrap-server kafka-broker-testing:9092 \
+  --topic Calculo --from-beginning

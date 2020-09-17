@@ -2,3 +2,4 @@ cassandra/db-data/
 calculo_estadisticas/test.sh
 .gitignore
 redis/data
+calculo_estadisticas/app/__pycache__/
