@@ -8,7 +8,8 @@ docker run --rm --name calculo-estadisticas -v $(pwd)/app:/app \
     -e "CASSANDRA_HOST=cassandra-testing" \
     -e "CASSANDRA_PORT=9042" \
     -e "CASSANDRA_KEYSPACE=pipeline" \
-    -e "REDIS_HOST=" \
-    -e "REDIS_PORT=" \
-    -e "REDIS_DB=" \
-    --network cassandra-testing pipeline-calculo-estadisticas python /app/main.py
+    -e "REDIS_HOST=redis-testing" \
+    -e "REDIS_PORT=6379" \
+    -e "REDIS_DB=1" \
+    -e "REDIS_PASSWORD=redis" \
+    --network testing pipeline-calculo-estadisticas python /app/main.py
