@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pull the imagee
+# Pull the image
 docker pull cassandra:3
 # Create the network if it doesn't exists
 docker network create --driver bridge testing || true
