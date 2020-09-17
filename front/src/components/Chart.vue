@@ -67,7 +67,7 @@ export default {
       {
           "date": new Date(2020,0,29),
           "magsp": 10000,
-          "error": 100
+          "error": 5000
       },
       {
           "date": new Date(2020,0,30),

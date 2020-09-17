@@ -17,27 +17,22 @@
                         <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Nombre: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.nombre }}</v-list-item-content>
+                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.Nombre }}</v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Magpsf: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.magpsf }}</v-list-item-content>
+                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ magpsf.value}}</v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Sigmapsf: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.sigmapsf }}</v-list-item-content>
+                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ sigmapsf.value }}</v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Sigmapsf Corregido: </v-list-item-content>
                             <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.sigmapsf_corr }}</v-list-item-content>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-icon id="flecha">mdi-circle-medium</v-icon>
-                            <v-list-item-content id="datoTarjeta" >Delta: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.delta }}</v-list-item-content>
                         </v-list-item>
                     </v-list>
                 </v-card>
@@ -59,10 +54,10 @@
                     <v-divider></v-divider>
 
                     <v-row>
-                        <v-col>
+                       <!-- <v-col>
                             <v-card-title id="subtituloTarjeta" >Sigmapsf</v-card-title>
                                 <Data :planet_data="sigmapsf" />
-                        </v-col>
+                        </v-col>-->
                         <v-col>
                             <v-card-title id="subtituloTarjeta" >Magpsf Corregido</v-card-title>
                                 <Data :planet_data="magpsfCorr" />
@@ -99,29 +94,27 @@ export default {
         planet: '',
         magpsfCorr: '',
         sigmapsf: '',
-        sigmapsfCorr: ''
+        sigmapsfCorr: '',
+        magpsf: ''
     }),
     created () {
         this.idPlanet = this.$route.params.id;
-        axios.get('http://localhost:3000/' + this.idPlanet).
+        axios.get('http://localhost:5000/' + this.idPlanet).
         then(res => {
             this.planet = res.data;
+            this.magpsf = {
+                "value" : res.data.Magpsf,
+            };
             this.magpsfCorr = {
-                "value": res.data.magpsf_corr,
-                "std":res.data.magpsf_stdCorr,
-                "prom":res.data.magpsf_promCorr
+                "std":res.data.Magspf_desvCorr,
+                "prom":res.data.Magspf_promCorr
             };
             this.sigmapsf = {
-                "value": res.data.sigmapsf,
-                "max": res.data.sigmapsf_maxCorr,
-                "min":res.data.sigmapsf_minCorr,
-                "std":res.data.sigmapsf_stdCorr,
-                "prom":res.data.sigmapsf_promCorr
+                "value": res.data.Sigmapsf,
             };
             this.sigmapsfCorr = {
-                "value": res.data.sigmapsf_corr,
-                "std":res.data.sigmapsf_stdCorr,
-                "prom":res.data.sigmapsf_promCorr
+                "std":res.data.Sigmapsf_desvCorr,
+                "prom":res.data.Sigmapsf_promCorr
             };
         }).catch(
             e => {
