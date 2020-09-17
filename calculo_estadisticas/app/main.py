@@ -1,4 +1,5 @@
 from distribuidos_common import Cassandra
+from distribuidos_common import Redis
 from cassandra.util import OrderedMapSerializedKey
 from estadistica import Estadistica
 from json import dumps
@@ -6,6 +7,7 @@ from json import dumps
 def setup():
     Cassandra.getInstance()
     Cassandra.addQuery('SELECT info FROM deteccion WHERE objectid=?')
+    Redis.getInstance()
 
 def addRow(dict, info):
     dict.get('magpsf_corr').append(info.get('magpsf_corr'))
@@ -27,4 +29,6 @@ def get_data(objectid):
 setup()
 id = 'lamejorllave';
 estadistica = get_data(id)
-print(estadistica)
+Redis.set(id, estadistica)
+data = Redis.get(id)
+print(data)
