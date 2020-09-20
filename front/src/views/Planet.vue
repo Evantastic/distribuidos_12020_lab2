@@ -42,7 +42,7 @@
             <v-col >
                 <v-card style="height: 100%">
                     <v-card-title id="tituloTarjeta">Gráfico</v-card-title>
-                    <Chart/>
+                    <Chart :idObject="idPlanet"/>
                 </v-card>
             </v-col>
         </v-row>
@@ -96,7 +96,7 @@ export default {
     }),
     created () {
         this.idPlanet = this.$route.params.id;
-        axios.get('http://localhost:5000/' + this.idPlanet).
+        axios.get('http://35.199.87.209/' + this.idPlanet).
         then(res => {
             this.planet = JSON.parse(res.data.replaceAll("NaN", "null"));
         }).catch(
@@ -104,7 +104,7 @@ export default {
                 console.log(e.response);
             }
         );
-        axios.get('http://localhost:5000/NB/' + this.idPlanet).
+        axios.get('http://35.199.87.209/NB/' + this.idPlanet).
         then(res => {
             this.nb = res.data;
         }).catch(

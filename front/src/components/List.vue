@@ -27,7 +27,7 @@ export default {
       Planets: ''
     }),
     created () {
-      axios.get('http://localhost:5000/').then(
+      axios.get('http://35.199.87.209/').then(
         res => {
           this.Planets = res.data.data
         } 
