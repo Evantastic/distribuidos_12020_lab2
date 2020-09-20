@@ -20,11 +20,13 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s.%(funcName)s: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-CONSUMER_CONFIG = {
-    'bootstrap.servers': 'localhost:9092',
-    'group.id': 'testo'
-}
 
+SERVER = os.getenv("KAFKA_HOST")
+GROUP_ID = os.getenv("GROUP_ID")
+CONSUMER_CONFIG = {
+    'bootstrap.servers': KAFKA_HOST,
+    'group.id': GROUP_ID
+}
 
 def list_topics(c: Consumer , filter_by="ztf"):
     topics = c.list_topics().topics.keys()

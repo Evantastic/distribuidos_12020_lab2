@@ -11,6 +11,8 @@ import sys
 from bs4 import BeautifulSoup
 import schedule
 import time
+from itertools import cycle
+
 
 KAFKA_HOST = os.getenv("KAFKA_HOST")
 logging.basicConfig(level=logging.INFO,
@@ -53,13 +55,14 @@ def read_avro(file):
 
 def to_stream_tar(file, producer, topic):
     tar = tarfile.open(os.path.join(OUTPUT_PATH, file))
+    particion = cycle(range(4))
     try:
         for member in tar.getmembers():
             logging.info(f"Getting {member.name}")
             tar.extract(member, OUTPUT_PATH)
             data = read_avro(os.path.join(OUTPUT_PATH, member.name))
             os.remove(os.path.join(OUTPUT_PATH, member.name))
-            producer.produce(topic, value=data)
+            producer.produce(topic, value=data, particion = next(particion))
             producer.flush()
     except Exception as e:
         logging.error(f"Problem {e} with {file}")
@@ -90,7 +93,6 @@ def new_file(archives):
 	wget.download("https://ztf.uw.edu/alerts/public/"+archives[15], os.path.join(OUTPUT_PATH))
 	to_stream_dir(OUTPUT_PATH, client, archives[15])
     
-
 schedule.every().day.at("11:00").do(new_file, files())
 
 if __name__ == "__main__":
