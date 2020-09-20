@@ -1,14 +1,14 @@
 <template>
     <v-container>
         <v-row>
-            <v-col v-for="picture in name" :key="picture">
+            <v-col v-for="picture in names" :key="picture">
                 <v-img
-                src="picture"
-                lazy-src="https://picsum.photos/id/11/100/60"
+                :src="picture"
+                lazy-src="https://storage.googleapis.com/distribuidos-astro/ZTF17aaagrhs/1.png"
                 aspect-ratio="1"
                 class="grey lighten-2"
-                max-width="500"
-                max-height="300"
+                max-width="200"
+                max-height="150"
                 >
                     <template v-slot:placeholder>
                         <v-row
@@ -31,24 +31,7 @@ export default {
     name: 'Picture',
     props: ["idObject"],
     data: () => ({
-      names:'',
-      pictures: [
-        {
-          id: 1,
-          img: 'https://storage.googleapis.com/distribuidos-astro/ZTF17aaarspi/1.png'
-        
-        },
-        {
-          id: 2,
-          img: 'https://bad.src/not/valid'
-          
-        },
-        {
-          id: 3,
-          img: 'https://bad.src/not/valid'
-          
-        },
-      ]
+      names:''
     }),
     created () {
       this.names = ['https://storage.googleapis.com/distribuidos-astro/' + this.idObject + '/1.png',

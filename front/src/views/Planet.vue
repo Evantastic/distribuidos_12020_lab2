@@ -24,16 +24,6 @@
                             <v-list-item-content id="datoTarjeta" >Nearly Black:  </v-list-item-content>
                             <v-list-item-content id="datoTarjeta2" class="align-end ">{{ nb }}</v-list-item-content>
                         </v-list-item>
-                        <!---<v-list-item>
-                            <v-icon id="flecha">mdi-circle-medium</v-icon>
-                            <v-list-item-content id="datoTarjeta" >Sigmapsf: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ sigmapsf.value }}</v-list-item-content>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-icon id="flecha">mdi-circle-medium</v-icon>
-                            <v-list-item-content id="datoTarjeta" >Sigmapsf Corregido: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.sigmapsf_corr }}</v-list-item-content>
-                        </v-list-item>-->
                     </v-list>
                 </v-card>
             </v-col>

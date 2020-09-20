@@ -50,6 +50,6 @@ export default {
 }
 
 #list{
-  width: 60%;
+  width: 90% !important;
 }
 </style>
