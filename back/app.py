@@ -1,27 +1,25 @@
 import redis 
 from flask import Flask, jsonify
 from flask_cors import CORS 
+import json
 
 app = Flask(__name__)
 CORS(app)
-cache = redis.StrictRedis(host='redis', port=6379, decode_responses=True)
+cache = redis.StrictRedis(host=, port=,db=,password=,decode_responses=True)
 
 @app.route('/')
 def keys():
-    values = []
-    for key in cache.scan_iter():
-        values.append(key)
-    ids = []
-    for id_data in values:
-        data = cache.hgetall(id_data)
-        list_aux = {
-            "id": id_data,
-            "nombre": data["Nombre"]
-        }
-        ids.append(list_aux)
-    return jsonify(ids)
+    values = cache.smembers("objetos")
+    '''for key in cache.scan_iter():
+        values.append(key)'''
+    return jsonify({'data': list(values)})
+
+@app.route('/NB/<id>')
+def nearlyBlack(id):
+    data = cache.get(id + "-NB")
+    return data
 
 @app.route('/<id>',methods=['GET'])
 def getData(id):
-    data = cache.hgetall(id)
-    return jsonify(data)
+    data = cache.get(id)
+    return json.loads(data)
