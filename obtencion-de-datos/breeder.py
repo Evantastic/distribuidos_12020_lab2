@@ -6,17 +6,22 @@ import logging
 import wget
 import sys
 import os
+import urllib.request
+import sys
+from bs4 import BeautifulSoup
+import schedule
+import time
 
-SERVER  = os.getenv("KAFKA_HOST")
+KAFKA_HOST = os.getenv("KAFKA_HOST")
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s.%(funcName)s: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
 ZTF_URL = "https://ztf.uw.edu/alerts/public/"
 WORKING_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_PATH = os.path.join(WORKING_DIRECTORY, "data/")
+OUTPUT_PATH = os.path.join(WORKING_DIRECTORY)
 KAFKA_CONFIG = {
-    "bootstrap.servers": SERVER
+    "bootstrap.servers": KAFKA_HOST
 }
 url_format = "https://ztf.uw.edu/alerts/public/{}"
 
@@ -61,7 +66,7 @@ def to_stream_tar(file, producer, topic):
     tar.close()
 
 
-def to_stream_dir(path_dir, kafka_client):
+def to_stream_dir(path_dir, kafka_client, name):
     producer = Producer(KAFKA_CONFIG)
     for file in os.listdir(path_dir):
         if file[-6:] == "tar.gz":
@@ -70,13 +75,26 @@ def to_stream_dir(path_dir, kafka_client):
             kafka_client.create_topics([new_topic])
             logging.info(f"Creating topic {topic_name}")
             to_stream_tar(file, producer, topic_name)
+    os.remove(OUTPUT_PATH+"/"+name)
+def files():
+	datos = urllib.request.urlopen('https://ztf.uw.edu/alerts/public/').read().decode()
+	soup =  BeautifulSoup(datos)
+	tags = soup('a')
+	archives = []
+	for tag in tags:
+		archives.append(tag.get('href'))	
+	return archives
 
+def new_file(archives):
+	print("Descargando archivo: " + archives[15])
+	wget.download("https://ztf.uw.edu/alerts/public/"+archives[15], os.path.join(OUTPUT_PATH))
+	to_stream_dir(OUTPUT_PATH, client, archives[15])
+    
+
+schedule.every().day.at("11:00").do(new_file, files())
 
 if __name__ == "__main__":
-    try:
-        download = int(sys.argv[1])
-        scrapper(qty=download)
-    except Exception as e:
-        logging.info(f"Data can't loaded: {e}")
     client = admin.AdminClient(KAFKA_CONFIG)
-    to_stream_dir(OUTPUT_PATH, client)
+    while(True):
+        schedule.run_pending()
+        time.sleep(30)
