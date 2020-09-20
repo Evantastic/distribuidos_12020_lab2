@@ -2,10 +2,10 @@
  <v-container id="list">
     <v-card>
       <v-list >
-        <v-list-item :to="{ name:'Planet', params:{id: item.id}}" v-for="item in visiblePages" :key="item.id" >
+        <v-list-item :to="{ name:'Planet', params:{id: item}}" v-for="item in visiblePages" :key="item.id" >
           <v-icon id="flecha">mdi-earth</v-icon>
           <v-list-item-content>
-            <v-list-title  >{{ item.nombre }}</v-list-title>
+            <v-list-title  >{{ item }}</v-list-title>
           </v-list-item-content>
         </v-list-item>
         <v-pagination
@@ -23,13 +23,13 @@ import axios from 'axios';
 export default {
     data: () => ({
       page: 1,
-      perPage: 5,
+      perPage: 7,
       Planets: ''
     }),
     created () {
       axios.get('http://localhost:5000/').then(
         res => {
-          this.Planets = res.data
+          this.Planets = res.data.data
         } 
       );
     },

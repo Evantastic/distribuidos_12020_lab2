@@ -1,9 +1,9 @@
 <template>
     <v-container>
         <v-row>
-            <v-col v-for="picture in pictures" :key="picture.id">
+            <v-col v-for="picture in name" :key="picture">
                 <v-img
-                :src="picture.img"
+                src="picture"
                 lazy-src="https://picsum.photos/id/11/100/60"
                 aspect-ratio="1"
                 class="grey lighten-2"
@@ -29,11 +29,13 @@
 <script>
 export default {
     name: 'Picture',
+    props: ["idObject"],
     data: () => ({
+      names:'',
       pictures: [
         {
           id: 1,
-          img: 'https://picsum.photos/id/11/100/60'
+          img: 'https://storage.googleapis.com/distribuidos-astro/ZTF17aaarspi/1.png'
         
         },
         {
@@ -47,6 +49,11 @@ export default {
           
         },
       ]
-    })
+    }),
+    created () {
+      this.names = ['https://storage.googleapis.com/distribuidos-astro/' + this.idObject + '/1.png',
+                    'https://storage.googleapis.com/distribuidos-astro/' + this.idObject + '/2.png',
+                    'https://storage.googleapis.com/distribuidos-astro/' + this.idObject + '/3.png']
+    }
 }
 </script>

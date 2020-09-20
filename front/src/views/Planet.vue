@@ -6,7 +6,7 @@
                 <v-card  flat>
                     <v-card-title  id="tituloTarjeta">Imagenes</v-card-title>
                     <v-divider></v-divider>
-                    <Picture/>
+                    <Picture :idObject="idPlanet"/>
                 </v-card>
             </v-col>
             <v-col cols="6">
@@ -17,14 +17,14 @@
                         <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Nombre: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.Nombre }}</v-list-item-content>
+                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ idPlanet }}</v-list-item-content>
                         </v-list-item>
-                        <v-list-item>
+                       <v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
-                            <v-list-item-content id="datoTarjeta" >Magpsf: </v-list-item-content>
-                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ magpsf.value}}</v-list-item-content>
+                            <v-list-item-content id="datoTarjeta" >Nearly Black:  </v-list-item-content>
+                            <v-list-item-content id="datoTarjeta2" class="align-end ">{{ nb }}</v-list-item-content>
                         </v-list-item>
-                        <v-list-item>
+                        <!---<v-list-item>
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Sigmapsf: </v-list-item-content>
                             <v-list-item-content id="datoTarjeta2" class="align-end ">{{ sigmapsf.value }}</v-list-item-content>
@@ -33,7 +33,7 @@
                             <v-icon id="flecha">mdi-circle-medium</v-icon>
                             <v-list-item-content id="datoTarjeta" >Sigmapsf Corregido: </v-list-item-content>
                             <v-list-item-content id="datoTarjeta2" class="align-end ">{{ planet.sigmapsf_corr }}</v-list-item-content>
-                        </v-list-item>
+                        </v-list-item>-->
                     </v-list>
                 </v-card>
             </v-col>
@@ -54,18 +54,18 @@
                     <v-divider></v-divider>
 
                     <v-row>
-                       <!-- <v-col>
-                            <v-card-title id="subtituloTarjeta" >Sigmapsf</v-card-title>
-                                <Data :planet_data="sigmapsf" />
-                        </v-col>-->
                         <v-col>
-                            <v-card-title id="subtituloTarjeta" >Magpsf Corregido</v-card-title>
-                                <Data :planet_data="magpsfCorr" />
+                            <v-card-title id="subtituloTarjeta" >Magpsf Corregido (Rojo)</v-card-title>
+                                <Data :planet_data="this.planet.rojo.magpsf_corregidos" />
+                            <v-card-title id="subtituloTarjeta" >Magpsf Corregido (Verde)</v-card-title>
+                                <Data :planet_data="this.planet.verde.magpsf_corregidos" />
 
                         </v-col>
                         <v-col>
-                            <v-card-title id="subtituloTarjeta" >Sigmapsf Corregido</v-card-title>
-                                <Data :planet_data="sigmapsfCorr" />
+                            <v-card-title id="subtituloTarjeta" >Sigmapsf Corregido (Rojo)</v-card-title>
+                                <Data :planet_data="this.planet.rojo.sigmapsf_corr" />
+                            <v-card-title id="subtituloTarjeta" >Sigmapsf Corregido (Verde)</v-card-title>
+                                <Data :planet_data="this.planet.verde.sigmapsf_corr" />
                         </v-col>
                     </v-row>
                 </v-card>
@@ -92,30 +92,21 @@ export default {
     data: () => ({
         idPlanet: '',
         planet: '',
-        magpsfCorr: '',
-        sigmapsf: '',
-        sigmapsfCorr: '',
-        magpsf: ''
+        nb: ''
     }),
     created () {
         this.idPlanet = this.$route.params.id;
         axios.get('http://localhost:5000/' + this.idPlanet).
         then(res => {
-            this.planet = res.data;
-            this.magpsf = {
-                "value" : res.data.Magpsf,
-            };
-            this.magpsfCorr = {
-                "std":res.data.Magspf_desvCorr,
-                "prom":res.data.Magspf_promCorr
-            };
-            this.sigmapsf = {
-                "value": res.data.Sigmapsf,
-            };
-            this.sigmapsfCorr = {
-                "std":res.data.Sigmapsf_desvCorr,
-                "prom":res.data.Sigmapsf_promCorr
-            };
+            this.planet = JSON.parse(res.data.replaceAll("NaN", "null"));
+        }).catch(
+            e => {
+                console.log(e.response);
+            }
+        );
+        axios.get('http://localhost:5000/NB/' + this.idPlanet).
+        then(res => {
+            this.nb = res.data;
         }).catch(
             e => {
                 console.log(e.response);
